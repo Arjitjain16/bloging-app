@@ -4,8 +4,13 @@ const path = require("path")
 const express = require("express")
 const expressLayout = require("express-ejs-layouts")
 
+const connectDB = require('./server/config/db')
+
 const app = express()
 const PORT = 8001 || process.env.PORT
+
+//mongo db 
+connectDB()
  
 app.use(express.static("public"))
 
