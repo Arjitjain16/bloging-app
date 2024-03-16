@@ -11,6 +11,10 @@ const PORT = 8001 || process.env.PORT
 
 //mongo db 
 connectDB()
+
+
+app.use(express.urlencoded({extended : true}))
+app.use(express.json())
  
 app.use(express.static("public"))
 
