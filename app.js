@@ -25,7 +25,8 @@ app.set("views", path.resolve("./views"))
 
 
 // app.get("/", require("./server/routes/main"))
-const mainRoutes = require('./server/routes/main');
-app.use('/', mainRoutes);
+
+app.use('/', require('./server/routes/main'));
+app.use('/', require('./server/routes/admin'));
 
 app.listen(PORT,()=>console.log(`sever started..${PORT}`))
