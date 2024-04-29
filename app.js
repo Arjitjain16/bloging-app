@@ -8,10 +8,11 @@ const MongoStore = require('connect-mongo')
 
 
 const connectDB = require('./server/config/db');
-const { mongo } = require('mongoose');
+// const { mongo } = require('mongoose');
+
 
 const app = express()
-const PORT = 8001 || process.env.PORT
+const PORT = process.env.PORT
 
 
 //mongo db 
@@ -21,7 +22,7 @@ connectDB()
 
 app.use(express.urlencoded({extended : true}))
 app.use(express.json())
-app.use(cookieParser);
+app.use(cookieParser());
 
 
 app.use(session({
@@ -36,12 +37,14 @@ app.use(express.static("public"))
 app.use(expressLayout)
 app.set("layout",'./layouts/main')
 app.set("view engine", "ejs")
+
 app.set("views", path.resolve("./views"))
 
+
+// app.locals.isActiveRoute = isActiveRoute; 
 
 // app.get("/", require("./server/routes/main"))
 
 app.use('/', require('./server/routes/main'));
 app.use('/', require('./server/routes/admin'));
-
 app.listen(PORT,()=>console.log(`sever started..${PORT}`))

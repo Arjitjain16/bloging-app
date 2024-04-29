@@ -11,21 +11,22 @@ const adminLayout = "../views/layouts/admin"
 jwtSecret = process.env.JWT_SECRET
 
 
-const authMiddleware = (req, res, next)=>{
-    const token = res.cookie.token
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.token; // Retrieve token from req.cookies
 
-    if(!token){
-        res.status(401).json({message : "Unauthorized"})
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
-        const decode = jwt.verify(token, jwtSecret)
-        req.userId = decode.userId
-        next()
+        const decoded = jwt.verify(token, jwtSecret);
+        req.userId = decoded.userId;
+        next();
     } catch (error) {
-        res.status(401).json({message : "Unauthorized"})
+        return res.status(401).json({ message: "Unauthorized" });
     }
-}
+};
+
 
 /**
  * GET /
@@ -56,7 +57,7 @@ router.post("/admin", async function(req, res){
             return res.status(401).json({message : "Invalid credential"})
         }
 
-        const PasswordValid = bcrypt.compare(password, user.password)
+        const PasswordValid = await bcrypt.compare(password, user.password)
 
         if(!PasswordValid){
             return res.status(401).json({message : "Invalid credentials"})
@@ -64,7 +65,6 @@ router.post("/admin", async function(req, res){
 
         const token = jwt.sign({userId : user._id}, jwtSecret)
         res.cookie('token', token , {httpOnly : true})
-
         res.redirect("/dashboard")
 
     } catch (error) {
@@ -83,7 +83,7 @@ router.get('/dashboard', authMiddleware, async function(req, res){
 router.post("/register", async function(req, res){
     try {
         const {username, password} = req.body
-        const hashedPassword =  bcrypt(password , 10)
+        const hashedPassword = await bcrypt.hash(password , 10)
 
         try {
             const user = await User.create({username, password:hashedPassword})

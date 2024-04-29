@@ -8,7 +8,7 @@ const Post = require('../models/post');
  * GET /
  * HOME
 */
-router.get('', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const locals = {
       title: "NodeJs Blog",
