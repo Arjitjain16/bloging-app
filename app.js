@@ -12,7 +12,7 @@ const connectDB = require('./server/config/db');
 
 
 const app = express()
-const PORT = process.env.PORT
+const PORT =  5000 || process.env.PORT
 
 
 //mongo db 
